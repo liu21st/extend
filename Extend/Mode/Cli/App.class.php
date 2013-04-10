@@ -21,6 +21,9 @@ class App {
      */
     static public function run() {
 
+    	//加载扩展配置文件
+    	load_ext_file();
+
         if(C('URL_MODEL')==1) {// PATHINFO 模式URL下面 采用 index.php module/action/id/4
             $depr = C('URL_PATHINFO_DEPR');
             $path   = isset($_SERVER['argv'][1])?$_SERVER['argv'][1]:'';
