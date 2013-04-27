@@ -65,18 +65,21 @@ class DbSqlsrv extends Db{
      * 执行查询  返回数据集
      * @access public
      * @param string $str  sql指令
+     * @param array $bind 参数绑定
      * @return mixed
      */
-    public function query($str) {
+    public function query($str,$bind=array()) {
         $this->initConnect(false);
         if ( !$this->_linkID ) return false;
-        $this->queryStr = $str;
         //释放前次的查询结果
         if ( $this->queryID ) $this->free();
         N('db_query',1);
         // 记录开始执行时间
         G('queryStartTime');
-        $this->queryID = sqlsrv_query($this->_linkID,$str,array(), array( "Scrollable" => SQLSRV_CURSOR_KEYSET));
+        $str    =   str_replace(array_keys($bind),'?',$str);
+        $bind   =   array_values($bind);
+        $this->queryStr = $str;
+        $this->queryID = sqlsrv_query($this->_linkID,$str,$bind, array( "Scrollable" => SQLSRV_CURSOR_KEYSET));
         $this->debug();
         if ( false === $this->queryID ) {
             $this->error();
@@ -91,18 +94,21 @@ class DbSqlsrv extends Db{
      * 执行语句
      * @access public
      * @param string $str  sql指令
+     * @param array $bind 参数绑定
      * @return integer
      */
-    public function execute($str) {
+    public function execute($str,$bind=array()) {
         $this->initConnect(true);
         if ( !$this->_linkID ) return false;
-        $this->queryStr = $str;
         //释放前次的查询结果
         if ( $this->queryID ) $this->free();
         N('db_write',1);
         // 记录开始执行时间
         G('queryStartTime');
-        $this->queryID=	sqlsrv_query($this->_linkID,$str);
+        $str    =   str_replace(array_keys($bind),'?',$str);
+        $bind   =   array_values($bind);
+        $this->queryStr = $str;
+        $this->queryID=	sqlsrv_query($this->_linkID,$str,$bind);
         $this->debug();
         if ( false === $this->queryID ) {
             $this->error();
@@ -249,6 +255,20 @@ class DbSqlsrv extends Db{
     }
 
     /**
+     * 字段名分析
+     * @access protected
+     * @param string $key
+     * @return string
+     */
+    protected function parseKey(&$key) {
+        $key   =  trim($key);
+        if(!preg_match('/[,\'\"\*\(\)\[.\s]/',$key)) {
+           $key = '['.$key.']';
+        }
+        return $key;   
+    }
+    
+    /**
      * limit
      * @access public
      * @param mixed $limit
@@ -279,7 +299,7 @@ class DbSqlsrv extends Db{
             .$this->parseWhere(!empty($options['where'])?$options['where']:'')
             .$this->parseLock(isset($options['lock'])?$options['lock']:false)
             .$this->parseComment(!empty($options['comment'])?$options['comment']:'');
-        return $this->execute($sql);
+        return $this->execute($sql,$this->parseBind(!empty($options['bind'])?$options['bind']:array()));
     }
 
     /**
@@ -295,7 +315,7 @@ class DbSqlsrv extends Db{
             .$this->parseWhere(!empty($options['where'])?$options['where']:'')
             .$this->parseLock(isset($options['lock'])?$options['lock']:false)
             .$this->parseComment(!empty($options['comment'])?$options['comment']:'');
-        return $this->execute($sql);
+        return $this->execute($sql,$this->parseBind(!empty($options['bind'])?$options['bind']:array()));
     }
 
     /**
