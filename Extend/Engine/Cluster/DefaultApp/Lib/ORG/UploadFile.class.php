@@ -107,12 +107,14 @@ class UploadFile {//类定义开始
 		if(!empty($this->water)){
 			import($this->imageClassPath);
 			$tmp_water=tempnam(sys_get_temp_dir(),'tp_');
-			Image::water($file['tmp_name'],$this->water,$tmp_water,$this->water_alpha,false);
-			if($this->water_savename){
-				file_upload($tmp_water,$this->water_savename);
-			}else{
-				$uploadfile=$tmp_water;
-			}
+			$ret=Image::water($file['tmp_name'],$this->water,$tmp_water,$this->water_alpha,false);
+            if(false!==$ret){
+                if($this->water_savename){
+                    file_upload($tmp_water,$this->water_savename);
+                }else{
+                    $uploadfile=$tmp_water;
+                }
+            }
 		}
 		//[cluster] 上传文件
         if(!$this->thumbRemoveOrigin && !file_upload($uploadfile, $this->autoCharset($filename,'utf-8','gbk'))) {
