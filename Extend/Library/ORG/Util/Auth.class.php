@@ -35,7 +35,7 @@
  DROP TABLE IF EXISTS `think_auth_rule`;
 CREATE TABLE `think_auth_rule` (  
     `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,  
-    `name` char(10) NOT NULL DEFAULT '',  
+    `name` char(80) NOT NULL DEFAULT '',  
     `title` char(20) NOT NULL DEFAULT '',  
     `status` tinyint(1) NOT NULL DEFAULT '1',  
     `condition` char(100) NOT NULL DEFAULT '',  
