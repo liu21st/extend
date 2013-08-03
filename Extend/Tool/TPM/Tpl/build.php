@@ -11,6 +11,7 @@
  * @author luofei614<weibo.com/luofei614>
  */
 //判断是否为命令行
+error_reporting(0);
 if('cli'!=PHP_SAPI){
     exit("must run from cmd\n");
 }
@@ -32,7 +33,6 @@ define('__ROOT__',dirname(__FILE__).'/');
 define('__API__','http://tpmbuild.thinkphp.cn/api.php');
 //生成压缩包
 $wwwzip=tempnam(sys_get_temp_dir(),'tpm');
-//debug
 $zip=new ZipArchive();
 if(!$zip->open($wwwzip,ZipArchive::CREATE)){
     exit("create zip failed!\n");
@@ -69,7 +69,11 @@ while($times<=40){
     $ret=http($url);
     if(isset($ret['url'])){
         //打包成功
-        file_put_contents(__ROOT__.$name.'-'.$version.substr($ret['url'],-4),file_get_contents($ret['url']));
+        $apkpath=__ROOT__.$name.'-'.$version.substr($ret['url'],-4);
+        @file_put_contents($apkpath,file_get_contents($ret['url']));
+        if(!file_exists($apkpath)){
+            exit("down apk failed!\n");
+        }
         exit("\nsuccess!\n");
     } 
     $times++;
