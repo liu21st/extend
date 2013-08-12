@@ -11,7 +11,7 @@
  * @author luofei614<weibo.com/luofei614>
  */
 //判断是否为命令行
-error_reporting(0);
+//error_reporting(0);
 if('cli'!=PHP_SAPI){
     exit("must run from cmd\n");
 }
@@ -32,7 +32,7 @@ if(!extension_loaded('curl')){
 define('__ROOT__',dirname(__FILE__).'/');
 define('__API__','http://tpmbuild.thinkphp.cn/api.php');
 //生成压缩包
-$wwwzip=tempnam(sys_get_temp_dir(),'tpm');
+$wwwzip=__ROOT__.'www.zip';
 $zip=new ZipArchive();
 if(!$zip->open($wwwzip,ZipArchive::CREATE)){
     exit("create zip failed!\n");
