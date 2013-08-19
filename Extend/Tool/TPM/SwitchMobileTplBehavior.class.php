@@ -2,6 +2,10 @@
 class SwitchMobileTplBehavior extends Behavior {
         //智能切换模板引擎
         public function run(&$params){
+          if(APP_DEBUG){
+            header('Access-Control-Allow-Origin:*');
+            header('Access-Control-Allow-Headers:client,x-requested-with');
+          }
 	      if(isset($_SERVER['HTTP_CLIENT']) &&'PhoneClient'==$_SERVER['HTTP_CLIENT']){ 
 		    	C('TMPL_ENGINE_TYPE','Mobile');
                 define('IS_CLIENT',true);
