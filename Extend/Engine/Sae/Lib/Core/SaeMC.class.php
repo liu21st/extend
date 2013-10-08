@@ -91,7 +91,7 @@ if (!class_exists('SaeMC')) {
 
         static function error() {
             $error = error_get_last();
-            if (!is_null($error) && strpos($error['file'], 'eval()') !== false) {
+            if (!is_null($error) && strpos($error['file'], 'eval()') && ($error['type'] & error_reporting()) !== false) {
                 if(!class_exists('Think')){
                     ob_end_clean();
                     if(C('OUTPUT_ENCODE')){

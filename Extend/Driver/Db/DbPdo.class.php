@@ -272,7 +272,7 @@ class DbPdo extends Db{
                     'type'    => $val['type'],
                     'notnull' => (bool)(((isset($val['null'])) && ($val['null'] === '')) || ((isset($val['notnull'])) && ($val['notnull'] === ''))), // not null is empty, null is yes
                     'default' => isset($val['default'])? $val['default'] :(isset($val['dflt_value'])?$val['dflt_value']:""),
-                    'primary' => isset($val['dey'])?strtolower($val['dey']) == 'pri':(isset($val['pk'])?$val['pk']:false),
+                    'primary' => isset($val['key'])?strtolower($val['key']) == 'pri':(isset($val['pk'])?$val['pk']:false),
                     'autoinc' => isset($val['extra'])?strtolower($val['extra']) == 'auto_increment':(isset($val['key'])?$val['key']:false),
                 );
             }
@@ -287,7 +287,7 @@ class DbPdo extends Db{
     public function getTables($dbName='') {
         if(C('DB_FETCH_TABLES_SQL')) {
             // 定义特殊的表查询SQL
-            $sql   = str_replace('%db%',$dnName,C('DB_FETCH_TABLES_SQL'));
+            $sql   = str_replace('%db%',$dbName,C('DB_FETCH_TABLES_SQL'));
         }else{
             switch($this->dbType) {
             case 'ORACLE':
