@@ -57,7 +57,13 @@ class App {
                 throw_exception(L('_MODULE_NOT_EXIST_').MODULE_NAME);
             }
         }
-        call_user_func(array(&$module,ACTION_NAME));
+        
+        if(defined('MODE_REPL') && PHP_SAPI == 'cli'){
+        	if(version_compare(PHP_VERSION, "5.3.0", "<"))
+        		exit("PHP version 5.3+ is required, Your php version is ".PHP_VERSION."\n");
+        	else Vendor("Boris.Loader");
+        } else call_user_func(array(&$module,ACTION_NAME));
+
         // 保存日志记录
         if(C('LOG_RECORD')) Log::save();
         return ;
