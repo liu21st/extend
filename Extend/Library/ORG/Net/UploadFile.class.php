@@ -335,6 +335,9 @@ class UploadFile {//类定义开始
             case 7:
                 $this->error = '文件写入失败';
                 break;
+            case 8:
+                $this->error = 'php扩展导致上传终止';
+                break;
             default:
                 $this->error = '未知上传错误！';
         }
@@ -505,8 +508,7 @@ class UploadFile {//类定义开始
      * @return boolean
      */
     private function getExt($filename) {
-        $pathinfo = pathinfo($filename);
-        return $pathinfo['extension'];
+        return pathinfo($filename, PATHINFO_EXTENSION);
     }
 
     /**
