@@ -123,13 +123,13 @@ class DbOracle extends Db{
         N('db_write',1);
         // 记录开始执行时间
         G('queryStartTime');
-        $stmt = oci_parse($this->_linkID,$str);
+        $this->queryID = oci_parse($this->_linkID,$str);
         $this->debug();
-        if (false === oci_execute($stmt)) {
+        if (false === oci_execute($this->queryID)) {
             $this->error();
             return false;
         } else {
-            $this->numRows = oci_num_rows($stmt);
+            $this->numRows = oci_num_rows($this->queryID);
             $this->lastInsID = $flag?$this->insertLastId():0;//modify by wyfeng at 2009.08.28
             return $this->numRows;
         }
