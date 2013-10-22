@@ -232,7 +232,7 @@ abstract class RestAction {
     }
 
     // 发送Http状态信息
-    protected function sendHttpStatus($status) {
+    protected function sendHttpStatus($code) {
         static $_status = array(
             // Informational 1xx
             100 => 'Continue',
