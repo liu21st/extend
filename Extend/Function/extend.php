@@ -140,9 +140,7 @@ function is_utf8($string) {
  * @return String
  */
 function highlight_code($str,$show=false) {
-    if(file_exists($str)) {
-        $str    =   file_get_contents($str);
-    }
+
     $str  =  stripslashes(trim($str));
     // The highlight string function encodes and highlights
     // brackets so we need them to start raw
